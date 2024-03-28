@@ -1,5 +1,7 @@
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
+import { toDoState } from './atom';
 
 const Wrapper = styled.div`
   display: flex;
@@ -31,10 +33,30 @@ const Card = styled.div`
   background-color: ${(props) => props.theme.cardColor};
 `;
 
-const toDos = ['a', 'b', 'c', 'd', 'e', 'f'];
-
 function App() {
-  const onDragEnd = () => {};
+  const [toDos, setToDos] =  useRecoilState(toDoState);
+
+  const onDragEnd = ({draggableId, destination, source}: DropResult) => {
+    if(!destination) return; // destination이 없는 경우, 변경❌
+
+    setToDos(oldToDos => {
+      // 0. copy oldToDos
+      const toDosCopy = [...oldToDos];
+      // 1. Delete item on source.index
+      console.log('Delete item on', source.index);
+      console.log(toDosCopy);
+      toDosCopy.splice(source.index, 1);
+      console.log('after delete item');
+      console.log(toDosCopy);
+            
+      // 2. Put the item on the destination.index
+      console.log('Put back ', draggableId, 'on ', destination.index);
+      toDosCopy.splice(destination?.index, 0, draggableId); // draggableId = toDo
+      console.log(toDosCopy);
+
+      return toDosCopy;
+    })
+  };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
@@ -43,7 +65,8 @@ function App() {
             {(provided) => (
               <Board ref={provided.innerRef} {...provided.droppableProps}>
                 {toDos.map((toDo, index) => (
-                  <Draggable draggableId={toDo} index={index}>
+                  // ✨ key = draggableId : 동일한 값이어야 함
+                  <Draggable key={toDo} draggableId={toDo} index={index}>
                     {(provided) => (
                       <Card
                         ref={provided.innerRef}
