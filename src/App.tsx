@@ -1,7 +1,8 @@
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { toDoState } from './atom';
+import DragabbleCard from './Components/DragabbleCard';
 
 const Wrapper = styled.div`
   display: flex;
@@ -26,13 +27,6 @@ const Board = styled.div`
   background-color: ${(props) => props.theme.boardColor};
 `;
 
-const Card = styled.div`
-  border-radius: 5px;
-  margin-bottom: 10px;
-  padding: 10px;  
-  background-color: ${(props) => props.theme.cardColor};
-`;
-
 function App() {
   const [toDos, setToDos] =  useRecoilState(toDoState);
 
@@ -43,20 +37,21 @@ function App() {
       // 0. copy oldToDos
       const toDosCopy = [...oldToDos];
       // 1. Delete item on source.index
-      console.log('Delete item on', source.index);
-      console.log(toDosCopy);
+      /* console.log('Delete item on', source.index);
+      console.log(toDosCopy); */
       toDosCopy.splice(source.index, 1);
-      console.log('after delete item');
-      console.log(toDosCopy);
+      /* console.log('after delete item');
+      console.log(toDosCopy); */
             
       // 2. Put the item on the destination.index
-      console.log('Put back ', draggableId, 'on ', destination.index);
+      /* console.log('Put back ', draggableId, 'on ', destination.index); */
       toDosCopy.splice(destination?.index, 0, draggableId); // draggableId = toDo
-      console.log(toDosCopy);
+      /* console.log(toDosCopy); */
 
       return toDosCopy;
     })
   };
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
@@ -65,20 +60,9 @@ function App() {
             {(provided) => (
               <Board ref={provided.innerRef} {...provided.droppableProps}>
                 {toDos.map((toDo, index) => (
-                  // ✨ key = draggableId : 동일한 값이어야 함
-                  <Draggable key={toDo} draggableId={toDo} index={index}>
-                    {(provided) => (
-                      <Card
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      >
-                        {toDo}
-                      </Card>
-                    )}
-                  </Draggable>
+                  <DragabbleCard key={toDo} index={index} toDo={toDo} />
                 ))}
-                {provided.placeholder} {/* Card가 Board에서 out-dragging 시어도, Board 크기 변경 ❌ */}
+                {provided.placeholder}
               </Board>
             )}
           </Droppable>
