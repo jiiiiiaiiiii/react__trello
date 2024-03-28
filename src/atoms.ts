@@ -11,8 +11,8 @@ export const hourSelector = selector<number>({
 		const minutes = get(minuteState);
 		return (minutes / 60);
 	},
-	set: ({set}, newValue) => {
-		const minutes = Number(newValue) * 60;
+	set: ({set}, hoursValue) => {
+		const minutes = Number(hoursValue) * 60;
 		set(minuteState, minutes);
 		//set(수정하고 싶은 recoil atom, 변경 후 새로운 값)
 	},

@@ -1,22 +1,40 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { minuteState, hourSelector } from './atoms';
-
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 function App() {
-  const [minutes, setMinutes] = useRecoilState(minuteState);
-  const [hours, setHours] = useRecoilState(hourSelector);
-  const onMinutesChange = (e:React.FormEvent<HTMLInputElement>) => {
-    setMinutes(+e.currentTarget.value); // +str => Number(str)
-  }
-  const onHoursChange = (e:React.FormEvent<HTMLInputElement>) => {
-    setHours(+e.currentTarget.value); // +str => Number(str)
-  }
-
+  const onDragEnd = () => {};
   return (
-    <div>
-      <input value={minutes} onChange={onMinutesChange} type="number" placeholder='Minutes' />
-      <input value={hours} onChange={onHoursChange} type="number" placeholder='Hours' />
-    </div>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div>
+        <Droppable droppableId='one'>
+          {(provided) => (
+            <ul ref={provided.innerRef} {...provided.droppableProps}>
+              <Draggable draggableId='first' index={0}>
+                {(provided) => (
+                  <li
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    
+                  ><span {...provided.dragHandleProps}>🔥</span>
+                    One
+                  </li>
+                )}
+              </Draggable>
+              <Draggable draggableId='second' index={1}>
+                {(provided) => (
+                  <li
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                  >
+                    Two
+                  </li>
+                )}
+              </Draggable>
+            </ul>
+          )}
+        </Droppable>
+      </div>
+    </DragDropContext>
   );
 }
 
