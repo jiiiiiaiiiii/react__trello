@@ -31,8 +31,5 @@ function DragabbleCard({toDo, index}: IDragabbleCardProps) {
     </Draggable>
   );
 }
-/* ✨ React.memo
-- 고차 컴포넌트(Higher Order Component)
-- 변화된 props만 re-rendering
-*/ 
+
 export default React.memo(DragabbleCard);
