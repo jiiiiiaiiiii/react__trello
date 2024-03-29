@@ -11,15 +11,17 @@ const Card = styled.div<{isDragging: boolean}>`
 `;
 
 interface IDragabbleCardProps {
-	toDo: string;
+	toDoId: number;
+	toDoText: string;
 	index: number;
 }
 
-function DragabbleCard({toDo, index}: IDragabbleCardProps) {
-	console.log(toDo, 'is rendered');	
+function DragabbleCard({toDoId, toDoText, index}: IDragabbleCardProps) {
+	console.log(toDoText, 'is rendered');	
 
   return (
-    <Draggable key={toDo} draggableId={toDo} index={index}>
+		// draggableId: string;
+    <Draggable draggableId={toDoId+''} index={index}>
       {(provided, snapshot) => (
         <Card
 					isDragging = {snapshot.isDragging}
@@ -27,7 +29,7 @@ function DragabbleCard({toDo, index}: IDragabbleCardProps) {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          {toDo}
+          {toDoText}
         </Card>
       )}
     </Draggable>
