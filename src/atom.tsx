@@ -1,4 +1,11 @@
 import { atom } from 'recoil';
+import { recoilPersist } from 'recoil-persist';
+
+// for save in localStorage
+const {persistAtom} = recoilPersist({
+	key: 'sessionStorage',
+  storage: sessionStorage,
+});
 
 export interface IToDo {
 	id: number;
@@ -15,7 +22,7 @@ export const toDoState = atom<IToDoState>({
 		"To Do": [],
 		Doing: [],
 		Done: [],
-		// Trash: [],
 	},
+	effects_UNSTABLE: [persistAtom],
 });
 

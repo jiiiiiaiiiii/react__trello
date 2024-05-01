@@ -46,6 +46,7 @@ function App() {
       });
     }
 
+
     // ✨2. Cross Board Movement
     if (
       destination.droppableId !== 'trash' &&
@@ -65,7 +66,6 @@ function App() {
         };
       });
     }
-    
     //  ✨3. Delete Task
     if (destination.droppableId === 'trash') {
       setToDos((allBoards) => {

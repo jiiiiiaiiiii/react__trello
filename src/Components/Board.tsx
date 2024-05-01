@@ -89,7 +89,7 @@ function Board({ toDos, boardId }: IBoardProps) {
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            {toDos.map((toDo, index) => (
+            {toDos.length !== 0 && toDos.map((toDo, index) => (
               <DragabbleCard
                 key={toDo.id}
                 index={index}
