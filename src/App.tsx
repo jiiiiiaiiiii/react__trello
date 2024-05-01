@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { toDoState } from './atom';
 import Board from './Components/Board';
+import TrashCan from './Components/TrashCan';
 
 const Wrapper = styled.div`
   display: flex;
@@ -26,7 +27,7 @@ function App() {
 
   const onDragEnd = (info: DropResult) => {
     // console.log(info);
-    const {destination, draggableId, source} = info;
+    const { destination, source } = info;
     // 0. No Destination
     if (!destination) return;
 
@@ -40,13 +41,16 @@ function App() {
         // console.log(taskObj);
         return {
           ...allBoards,
-          [source.droppableId]: boardCopy
+          [source.droppableId]: boardCopy,
         };
-      })
+      });
     }
 
     // ✨2. Cross Board Movement
-    if (destination.droppableId !== source.droppableId) {
+    if (
+      destination.droppableId !== 'trash' &&
+      destination.droppableId !== source.droppableId
+    ) {
       setToDos((allBoards) => {
         const sourceBoard = [...allBoards[source.droppableId]];
         const taskObj = sourceBoard[source.index];
@@ -57,9 +61,21 @@ function App() {
         return {
           ...allBoards,
           [source.droppableId]: sourceBoard,
-          [destination.droppableId] : targetBoard
-        }
-      })
+          [destination.droppableId]: targetBoard,
+        };
+      });
+    }
+    
+    //  ✨3. Delete Task
+    if (destination.droppableId === 'trash') {
+      setToDos((allBoards) => {
+        const sourceBoard = [...allBoards[source.droppableId]];
+        sourceBoard.splice(source.index, 1);
+        return {
+          ...allBoards,
+          [source.droppableId]: sourceBoard,
+        };
+      });
     }
   };
 
@@ -71,6 +87,7 @@ function App() {
             <Board boardId={boardId} key={boardId} toDos={toDos[boardId]} />
           ))}
         </Boards>
+        <TrashCan />
       </Wrapper>
     </DragDropContext>
   );

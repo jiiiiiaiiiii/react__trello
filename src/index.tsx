@@ -60,7 +60,8 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-weight: 300;
     font-family: 'Source Sans Pro', sans-serif;
-    background-color:${(props) => props.theme.bgColor};
+    /* background:linear-gradient(to bottom, #D7DDE8, #757F9A); */
+    background-color: aliceblue;
     color:black;
     line-height: 1.2;
   }
